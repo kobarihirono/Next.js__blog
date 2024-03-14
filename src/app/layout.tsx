@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "./Header";
 import Footer from "./Footer";
 import "./globals.css";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 // メタデータや画面全体のレイアウトを記載
 export const metadata: Metadata = {
@@ -18,7 +20,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className="container mx-auto bg-slate-700 text-slate-100">
         <Header />
-        {children}
+        <Suspense fallback={<Loading />}> {children}</Suspense>
         <Footer />
       </body>
     </html>
