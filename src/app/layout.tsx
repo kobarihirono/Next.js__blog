@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Header from "./Header";
+import Footer from "./Footer";
 import "./globals.css";
 
 // メタデータや画面全体のレイアウトを記載
@@ -14,7 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body className="container mx-auto bg-slate-700 text-slate-100">
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
