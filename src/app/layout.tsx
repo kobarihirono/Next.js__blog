@@ -5,7 +5,6 @@ import "./globals.css";
 import { Suspense } from "react";
 import Loading from "./loading";
 
-
 // メタデータや画面全体のレイアウトを記載
 export const metadata: Metadata = {
   title: "Next.js 13 blog",

@@ -1,17 +1,29 @@
 "use client";
 import { createArticles } from "@/blogAPI";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const CreateBlogPage = () => {
+  // ページ遷移
+  const router = useRouter();
+  // 状態管理
   const [id, setId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
+  // ローディング
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(id, title, content);
+
+    setLoading(true);
 
     await createArticles(id, title, content);
+
+    // リダイレクト前にoff
+    setLoading(false);
+    router.push("/");
+    router.refresh();
   };
 
   return (
@@ -26,7 +38,7 @@ const CreateBlogPage = () => {
           <label className="text-gray-700 text-sm font-bold mb-2">URL</label>
           <input
             type="text"
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+            className="bg-white shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
             onChange={(e) => setId(e.target.value)}
           />
         </div>
@@ -36,20 +48,25 @@ const CreateBlogPage = () => {
           </label>
           <input
             type="text"
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+            className="bg-white shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className="mb-4">
           <label className="text-gray-700 text-sm font-bold mb-2">本文</label>
           <textarea
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+            className="bg-white shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
         <button
           type="submit"
-          className="py-2 px-4 border rounded-md bg-orange-300"
+          className={`py-2 px-4 border rounded-md ${
+            loading
+              ? "bg-orange-300 cursor-not-allowed"
+              : "bg-orange-400 hover:bg-orange-500"
+          }`}
+          disabled={loading}
         >
           投稿
         </button>
