@@ -1,26 +1,41 @@
 "use client";
-import { createArticles } from "@/blogAPI";
+
+// import { createArticle } from "@/pages/api/articles/articles";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const CreateBlogPage = () => {
-  // ページ遷移
+const CreateArticle = () => {
   const router = useRouter();
-  // 状態管理
-  const [id, setId] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  // ローディング
-  const [loading, setLoading] = useState<boolean>(false);
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setLoading(true);
 
-    await createArticles(id, title, content);
+    // await createArticle(id, title, content);
+    const newArticle = await fetch(`${API_URL}/api/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, title, content }),
+    });
 
-    // リダイレクト前にoff
+    console.log("new article");
+    console.log(newArticle);
+
+    if (!newArticle.ok) {
+      const errorData = await newArticle.json();
+      console.error("Error Response:", errorData);
+    } else {
+      // 成功した場合の処理
+      console.log("OK");
+    }
     setLoading(false);
     router.push("/");
     router.refresh();
@@ -75,4 +90,4 @@ const CreateBlogPage = () => {
   );
 };
 
-export default CreateBlogPage;
+export default CreateArticle;
