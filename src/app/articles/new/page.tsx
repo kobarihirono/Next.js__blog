@@ -17,7 +17,6 @@ const CreateArticle = () => {
     e.preventDefault();
     setLoading(true);
 
-    // await createArticle(id, title, content);
     const newArticle = await fetch(`${API_URL}/api/create`, {
       method: "POST",
       headers: {
@@ -26,16 +25,17 @@ const CreateArticle = () => {
       body: JSON.stringify({ id, title, content }),
     });
 
-    console.log("new article");
-    console.log(newArticle);
+    // console.log("new article");
+    // console.log(newArticle);
 
-    if (!newArticle.ok) {
-      const errorData = await newArticle.json();
-      console.error("Error Response:", errorData);
-    } else {
-      // 成功した場合の処理
-      console.log("OK");
-    }
+    // 新規投稿作成機能のエラーハンドリング
+    // if (!newArticle.ok) {
+    //   const errorData = await newArticle.json();
+    //   console.error("Error Response:", errorData);
+    // } else {
+    //   console.log("OK");
+    // }
+
     setLoading(false);
     router.push("/");
     router.refresh();

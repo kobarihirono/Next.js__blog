@@ -8,20 +8,33 @@ export default async function handler(
 ) {
   const { id } = req.query;
 
-  // postsテーブルから特定のデータを取得
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("id", id)
-    .single();
+  switch (req.method) {
+    case "GET":
+      // postsテーブルから特定のデータを取得
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-  if (error) {
-    return res.status(500).json({ error: error.message });
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+      if (!data) {
+        notFound();
+      }
+
+      return res.status(200).json(data);
+
+    case "DELETE":
+      const { error: deleteError } = await supabase
+        .from("posts")
+        .delete()
+        .eq("id", id);
+      if (deleteError) {
+        return res.status(500).json({ error: deleteError.message });
+      }
+      return res.status(200).json({ message: "削除に成功しました" });
   }
-
-  if (!data) {
-    notFound();
-  }
-
-  return res.status(200).json(data);
 }
