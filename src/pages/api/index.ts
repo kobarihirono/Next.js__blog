@@ -5,6 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  // postsテーブルから全てのデータを取得
   const { data, error } = await supabase.from("posts").select("*");
 
   if (error) {
